@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evastek — Empresa Júnior de Marketing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark: #1c1f26;
+      --light: #f8f9fa;
+      --blue: #0d2b4e;
+      --blue-mid: #0e3d6e;
+      --accent: #1a5fa8;
+      --accent-light: #4a9edd;
+      --muted: #8a9ab0;
+      --border: rgba(248,249,250,0.08);
+      --card-bg: rgba(255,255,255,0.03);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--light);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 10px; height: 10px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(74,158,221,0.4);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    }
+    .cursor.hover { width: 6px; height: 6px; background: #fff; }
+    .cursor-ring.hover { width: 52px; height: 52px; border-color: rgba(74,158,221,0.8); }
+
+    /* Nav */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 60px;
+      background: linear-gradient(to bottom, rgba(28,31,38,0.95) 0%, transparent 100%);
+      backdrop-filter: blur(8px);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.02em;
+      color: var(--light);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent-light); }
+    .nav-links { display: flex; gap: 40px; }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background: var(--accent-light);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--light); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light);
+      text-decoration: none;
+      border: 1px solid rgba(248,249,250,0.2);
+      padding: 10px 22px;
+      border-radius: 2px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.4); }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 140px 60px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(13,43,78,0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(26,95,168,0.15) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+    }
+    .hero-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      font-weight: 500;
+      margin-bottom: 28px;
+      position: relative;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-label::before {
+      content: '';
+      width: 32px; height: 1px;
+      background: var(--accent-light);
+      display: block;
+    }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .hero-title .line { display: block; overflow: hidden; }
+    .hero-title .line span {
+      display: block;
+      animation: slideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .hero-title .line:nth-child(2) { height: 1em; overflow: visible; }
+    .hero-title .line:nth-child(2) span { animation-delay: 0.1s; white-space: nowrap; display: flex; align-items: baseline; gap: 0.25em; }
+    .hero-title .line:nth-child(3) span { animation-delay: 0.2s; }
+    .hero-title .accent {
+      color: var(--accent-light);
+      display: inline-block;
+      min-width: 380px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(110%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+      position: relative;
+      margin-bottom: 52px;
+      animation: fadeIn 1s 0.5s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-actions {
+      display: flex; align-items: center; gap: 24px;
+      position: relative;
+      animation: fadeIn 1s 0.65s ease both;
+    }
+    .btn-primary {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dark);
+      background: var(--light);
+      text-decoration: none;
+      padding: 16px 36px;
+      border-radius: 2px;
+      transition: background 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #c8d6e8; transform: translateY(-2px); }
+    .btn-ghost {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.3s ease;
+    }
+    .btn-ghost:hover { color: var(--light); }
+    .btn-ghost svg { transition: transform 0.3s ease; }
+    .btn-ghost:hover svg { transform: translateX(4px); }
+
+    .hero-stats {
+      position: absolute;
+      right: 60px; bottom: 100px;
+      display: flex; gap: 60px;
+      animation: fadeIn 1s 0.8s ease both;
+    }
+    .stat { text-align: right; }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--light);
+      line-height: 1;
+    }
+    .stat-number span { color: var(--accent-light); }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Marquee */
+    .marquee-wrapper {
+      padding: 28px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .marquee-track {
+      display: flex; gap: 0;
+      animation: marquee 22s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: flex; align-items: center; gap: 24px;
+      padding: 0 32px;
+      white-space: nowrap;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .marquee-dot {
+      width: 4px; height: 4px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Section base */
+    section { padding: 120px 60px; }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before {
+      content: '';
+      width: 22px; height: 1px;
+      background: var(--accent-light);
+      display: block;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    /* About */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.98rem;
+      margin-bottom: 16px;
+    }
+    .about-text p strong { color: var(--light); font-weight: 500; }
+    .about-visual {
+      position: relative;
+      height: 420px;
+    }
+    .about-card {
+      position: absolute;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+    }
+    .about-card.main {
+      inset: 0;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      background: linear-gradient(135deg, rgba(13,43,78,0.5) 0%, rgba(28,31,38,0.8) 100%);
+      border-color: rgba(26,95,168,0.3);
+    }
+    .about-card.main .big-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 5rem;
+      font-weight: 800;
+      color: var(--accent-light);
+      opacity: 0.15;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .about-card.main .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .about-card.main .card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .about-card.float {
+      top: 20px; right: -20px;
+      width: 160px;
+      text-align: center;
+      background: rgba(26,95,168,0.12);
+      border-color: rgba(26,95,168,0.3);
+    }
+    .about-card.float .num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent-light);
+    }
+    .about-card.float .lbl {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Services */
+    .services-section { background: rgba(255,255,255,0.01); }
+    .services-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 64px;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      background: var(--dark);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s ease;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    /* Shine effect */
+    .service-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(74,158,221,0.06), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+    .service-card:hover::after { left: 160%; }
+    .service-card:hover { background: rgba(13,43,78,0.3); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--accent-light);
+      margin-bottom: 32px;
+      opacity: 0.7;
+    }
+    .service-icon {
+      width: 44px; height: 44px;
+      margin-bottom: 24px;
+      color: var(--accent-light);
+    }
+    .service-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+    .service-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .service-tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 24px;
+    }
+    .tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+
+    /* Process */
+    .process-section {}
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      margin-top: 64px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border) 10%, var(--border) 90%, transparent);
+    }
+    .process-step { position: relative; padding-top: 60px; }
+    .step-dot {
+      position: absolute;
+      top: 20px; left: 0;
+      width: 16px; height: 16px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-dot::after {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent-light);
+      border-radius: 50%;
+    }
+    .step-num {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* Testimonials */
+    .testimonials-section { background: linear-gradient(180deg, transparent 0%, rgba(13,43,78,0.12) 50%, transparent 100%); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .testimonial-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 36px;
+      border-radius: 4px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .testimonial-card:hover { border-color: rgba(26,95,168,0.4); transform: translateY(-4px); }
+    .quote-mark {
+      font-family: 'Syne', sans-serif;
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--accent);
+      opacity: 0.3;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 28px;
+      font-style: italic;
+      flex: 1;
+    }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-mid), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--light);
+      flex-shrink: 0;
+    }
+    .author-name {
+      font-weight: 500;
+      font-size: 0.88rem;
+    }
+    .author-role {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(13,43,78,0.6) 0%, transparent 70%);
+    }
+    .cta-section .section-label { justify-content: center; }
+    .cta-section .section-label::before { display: none; }
+    .cta-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .cta-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+      position: relative;
+    }
+    .cta-actions {
+      display: flex; justify-content: center; gap: 16px;
+      position: relative;
+    }
+    .btn-outline {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--light);
+      text-decoration: none;
+      padding: 16px 32px;
+      border: 1px solid rgba(248,249,250,0.2);
+      border-radius: 2px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .btn-outline:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.04); }
+
+    /* Footer */
+    footer {
+      padding: 64px 60px 40px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+    .footer-brand .nav-logo { display: block; margin-bottom: 16px; font-size: 1.6rem; }
+    .footer-brand p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; max-width: 260px; }
+    .footer-col-title {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--light);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--light); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+    .footer-socials { display: flex; gap: 20px; }
+    .footer-socials a {
+      width: 34px; height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .footer-socials a:hover { color: var(--light); border-color: rgba(255,255,255,0.3); }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      .hero { padding: 120px 24px 80px; }
+      .hero-stats { position: static; margin-top: 60px; justify-content: flex-start; gap: 40px; }
+      .about { grid-template-columns: 1fr; gap: 60px; }
+      .about-visual { height: 260px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      body { cursor: auto; }
+      .cursor, .cursor-ring { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">evas<span>tek</span></a>
+    <div class="nav-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#processo">Processo</a>
+      <a href="#depoimentos">Casos</a>
+    </div>
+    <a href="#contato" class="nav-cta">Fale Conosco</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="particles" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-label">Empresa Júnior de Marketing</div>
+    <h1 class="hero-title">
+      <span class="line"><span>Marketing que</span></span>
+      <span class="line"><span>move <span class="accent" id="typed-word">negócios</span></span></span>
+      <span class="line"><span>de verdade.</span></span>
+    </h1>
+    <p class="hero-desc">
+      Estratégia, criatividade e dados trabalhando juntos. A Evastek entrega soluções completas de marketing para empresas que querem crescer com inteligência.
+    </p>
+    <div class="hero-actions">
+      <a href="#servicos" class="btn-primary">Ver Serviços</a>
+      <a href="#sobre" class="btn-ghost">
+        Conheça a Evastek
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number"><span class="counter" data-target="12">0</span><span>+</span></div>
+        <div class="stat-label">Projetos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number"><span class="counter" data-target="8">0</span><span>+</span></div>
+        <div class="stat-label">Clientes</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number"><span class="counter" data-target="93">0</span><span>%</span></div>
+        <div class="stat-label">Satisfação</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
+      <!-- duplicated for infinite scroll -->
+      <div class="marquee-item"><span class="marquee-dot"></span>Branding</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Marketing Digital</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Social Media</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>SEO & Performance</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Criação de Conteúdo</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Gestão de Tráfego</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Identidade Visual</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Consultoria Estratégica</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Email Marketing</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Análise de Dados</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Branding</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Marketing Digital</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Social Media</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>SEO & Performance</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Criação de Conteúdo</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Gestão de Tráfego</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Identidade Visual</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Consultoria Estratégica</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Email Marketing</div>
+      <div class="marquee-item"><span class="marquee-dot"></span>Análise de Dados</div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="about reveal">
+      <div class="about-text">
+        <div class="section-label">Sobre a Evastek</div>
+        <h2 class="section-title">Formados para<br>criar impacto.</h2>
+        <p>A Evastek é uma <strong>empresa júnior de marketing</strong> formada por estudantes universitários altamente capacitados e orientados por resultados. Combinamos o vigor acadêmico com a experiência prática do mercado.</p>
+        <p>Trabalhamos com <strong>todos os pilares do marketing moderno</strong> — do digital ao estratégico — entregando projetos com a seriedade e a qualidade de uma agência sênior, com a inovação de quem respira o mercado do futuro.</p>
+        <p>Nossa missão é simples: <strong>transformar o seu negócio</strong> com soluções inteligentes, criativas e mensuráveis.</p>
+      </div>
+      <div class="about-visual">
+        <div class="about-card main">
+          <div class="big-text">EJ</div>
+          <div class="card-title">Empresa Júnior</div>
+          <div class="card-desc">Parte do maior movimento de empreendedorismo jovem do Brasil.</div>
+        </div>
+        <div class="about-card float">
+          <div class="num">100%</div>
+          <div class="lbl">Dedicação</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos" class="services-section">
+    <div class="services-header reveal">
+      <div>
+        <div class="section-label">O que fazemos</div>
+        <h2 class="section-title">Serviços completos<br>de marketing.</h2>
+      </div>
+    </div>
+    <div class="services-grid reveal">
+
+      <div class="service-card">
+        <div class="service-num">01</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="22" cy="22" r="18"/>
+          <path d="M22 10v24M10 22h24"/>
+          <circle cx="22" cy="22" r="6" fill="currentColor" opacity="0.15"/>
+        </svg>
+        <div class="service-name">Branding & Identidade Visual</div>
+        <div class="service-desc">Criamos marcas que ficam na memória. Logotipo, paleta, tipografia e manual de identidade para posicionar sua empresa com clareza.</div>
+        <div class="service-tags">
+          <span class="tag">Logo</span>
+          <span class="tag">Manual</span>
+          <span class="tag">Papelaria</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">02</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="6" y="10" width="32" height="24" rx="3"/>
+          <path d="M6 18h32M14 14h2M20 14h2"/>
+          <path d="M14 26l4 4 10-8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="service-name">Marketing Digital</div>
+        <div class="service-desc">Estratégias integradas para presença online: SEO, tráfego pago, e-mail marketing e muito mais — com foco total em conversão.</div>
+        <div class="service-tags">
+          <span class="tag">SEO</span>
+          <span class="tag">Google Ads</span>
+          <span class="tag">E-mail</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">03</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 34L16 20l8 8 6-10 6 16"/>
+          <circle cx="16" cy="12" r="4"/>
+          <circle cx="30" cy="8" r="3"/>
+        </svg>
+        <div class="service-name">Social Media</div>
+        <div class="service-desc">Gerenciamento estratégico de redes sociais: planejamento de conteúdo, criação de posts e gestão da comunidade para engajar sua audiência.</div>
+        <div class="service-tags">
+          <span class="tag">Instagram</span>
+          <span class="tag">LinkedIn</span>
+          <span class="tag">TikTok</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">04</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M8 36l8-14 8 6 8-12 8 8"/>
+          <path d="M34 10h-8v8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="service-name">Gestão de Tráfego</div>
+        <div class="service-desc">Campanhas pagas com performance monitorada: Meta Ads, Google Ads e plataformas afins para maximizar seu ROI com precisão.</div>
+        <div class="service-tags">
+          <span class="tag">Meta Ads</span>
+          <span class="tag">Google</span>
+          <span class="tag">ROI</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">05</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M10 34V20l12-10 12 10v14"/>
+          <rect x="16" y="24" width="12" height="10"/>
+          <path d="M22 14v4"/>
+        </svg>
+        <div class="service-name">Criação de Conteúdo</div>
+        <div class="service-desc">Textos, artes, vídeos e peças criativas que comunicam com impacto. Conteúdo pensado para cada canal e cada etapa do funil.</div>
+        <div class="service-tags">
+          <span class="tag">Copywriting</span>
+          <span class="tag">Design</span>
+          <span class="tag">Vídeo</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">06</div>
+        <svg class="service-icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="22" cy="16" r="8"/>
+          <path d="M8 36c0-7.7 6.3-14 14-14s14 6.3 14 14"/>
+          <path d="M28 20l6 6M22 24v8" stroke-linecap="round"/>
+        </svg>
+        <div class="service-name">Consultoria Estratégica</div>
+        <div class="service-desc">Diagnóstico de marketing, análise de concorrência e planejamento estratégico para orientar as decisões da sua empresa com inteligência.</div>
+        <div class="service-tags">
+          <span class="tag">Diagnóstico</span>
+          <span class="tag">Planejamento</span>
+          <span class="tag">Dados</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROCESSO -->
+  <section id="processo">
+    <div class="reveal">
+      <div class="section-label">Como trabalhamos</div>
+      <h2 class="section-title">Um processo claro,<br>resultados concretos.</h2>
+    </div>
+    <div class="process-steps reveal">
+      <div class="process-step">
+        <div class="step-dot"></div>
+        <div class="step-num">01 — Diagnóstico</div>
+        <div class="step-title">Entendemos seu negócio</div>
+        <div class="step-desc">Mergulhamos no seu contexto: mercado, concorrentes, público e objetivos. Sem suposições, só dados.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-dot"></div>
+        <div class="step-num">02 — Estratégia</div>
+        <div class="step-title">Construímos o plano</div>
+        <div class="step-desc">Com base no diagnóstico, desenhamos um plano de ação personalizado com metas, canais e KPIs definidos.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-dot"></div>
+        <div class="step-num">03 — Execução</div>
+        <div class="step-title">Colocamos em prática</div>
+        <div class="step-desc">Nossa equipe executa com agilidade e qualidade, mantendo você atualizado em cada etapa do processo.</div>
+      </div>
+      <div class="process-step">
+        <div class="step-dot"></div>
+        <div class="step-num">04 — Resultados</div>
+        <div class="step-title">Medimos e evoluímos</div>
+        <div class="step-desc">Analisamos os resultados com rigor e ajustamos continuamente para garantir a máxima performance.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos" class="testimonials-section">
+    <div class="reveal">
+      <div class="section-label">O que dizem</div>
+      <h2 class="section-title">Clientes que confiam<br>na Evastek.</h2>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">A Evastek transformou nossa presença digital. Em três meses, nossas redes sociais cresceram 180% e as vendas online dobraram. Profissionalismo de outro nível para uma equipe jovem.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">AC</div>
+          <div>
+            <div class="author-name">Ana Carolina</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">Contratar a Evastek foi a melhor decisão estratégica do ano. Eles entenderam nosso negócio rapidamente e entregaram um branding que realmente nos representa no mercado.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">MR</div>
+          <div>
+            <div class="author-name">Marcos Ribeiro</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <div class="testimonial-text">Resultado acima do esperado em tráfego pago. Reduziram nosso CAC em 40% enquanto aumentavam o volume de leads. São detalhistas, comunicativos e muito competentes.</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">JS</div>
+          <div>
+            <div class="author-name">Juliana Santos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contato" class="cta-section">
+    <div class="cta-bg"></div>
+    <div class="section-label">Vamos conversar</div>
+    <h2 class="cta-title">Pronto para <span style="color:var(--accent-light)">crescer</span>?</h2>
+    <p class="cta-desc">Conte-nos sobre o seu projeto. A Evastek está pronta para ser a parceira estratégica que o seu negócio precisa.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/5528999959784?text=Olá!%20Vim%20pelo%20site%20da%20Evastek%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20de%20marketing.%20Podemos%20conversar%3F" target="_blank" class="btn-primary">Enviar Proposta</a>
+      <a href="https://wa.me/5528999959784" target="_blank" class="btn-outline">WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">evas<span>tek</span></a>
+        <p>Empresa Júnior de Marketing. Criatividade, estratégia e resultados para o seu negócio crescer.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Serviços</div>
+        <ul class="footer-links">
+          <li><a href="#">Branding</a></li>
+          <li><a href="#">Marketing Digital</a></li>
+          <li><a href="#">Social Media</a></li>
+          <li><a href="#">Tráfego Pago</a></li>
+          <li><a href="#">Consultoria</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Empresa</div>
+        <ul class="footer-links">
+          <li><a href="#">Sobre nós</a></li>
+          <li><a href="#">Nossa equipe</a></li>
+          <li><a href="#">Cases</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contato</div>
+        <ul class="footer-links">
+          <li><a href="mailto:evastekcontato@gmail.com">evastekcontato@gmail.com</a></li>
+          <li><a href="https://wa.me/5528999959784">(28) 99995-9784</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Evastek — Empresa Júnior de Marketing. Todos os direitos reservados.</div>
+      <div class="footer-socials">
+        <a href="#">in</a>
+        <a href="#">ig</a>
+        <a href="#">wa</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── CUSTOM CURSOR ──
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      setTimeout(() => {
+        ring.style.left = e.clientX + 'px';
+        ring.style.top = e.clientY + 'px';
+      }, 60);
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+      el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+    });
+
+    // ── 1. PARTICLES ──
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resizeCanvas() {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function Particle() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.r = Math.random() * 1.5 + 0.5;
+      this.alpha = Math.random() * 0.5 + 0.1;
+    }
+
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(74,158,221,${p.alpha})`;
+        ctx.fill();
+      });
+      // Draw lines between close particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(74,158,221,${0.12 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // ── 2. TYPING EFFECT ──
+    const words = ['negócios', 'marcas', 'resultados', 'estratégias', 'clientes'];
+    let wordIndex = 0, charIndex = 0, deleting = false;
+    const typedEl = document.getElementById('typed-word');
+
+    function type() {
+      const word = words[wordIndex];
+      if (!deleting) {
+        typedEl.textContent = word.substring(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === word.length) { deleting = true; setTimeout(type, 3000); return; }
+      } else {
+        typedEl.textContent = word.substring(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) { deleting = false; wordIndex = (wordIndex + 1) % words.length; }
+      }
+      setTimeout(type, deleting ? 90 : 150);
+    }
+    setTimeout(type, 2000);
+
+    // Blinking cursor on typed word
+    typedEl.style.borderRight = '3px solid #4a9edd';
+    typedEl.style.paddingRight = '4px';
+    setInterval(() => {
+      typedEl.style.borderColor = typedEl.style.borderColor === 'transparent' ? '#4a9edd' : 'transparent';
+    }, 530);
+
+    // ── 3. COUNTER ANIMATION ──
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.target);
+      const duration = 3500;
+      const start = performance.now();
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 4);
+        el.textContent = Math.floor(ease * target);
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(update);
+    }
+
+    const counters = document.querySelectorAll('.counter');
+    let countersStarted = false;
+    function checkCounters() {
+      if (countersStarted) return;
+      counters.forEach(c => {
+        const rect = c.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          countersStarted = true;
+          counters.forEach(animateCounter);
+        }
+      });
+    }
+    window.addEventListener('scroll', checkCounters, { passive: true });
+    checkCounters();
+
+    // ── 4. PARALLAX ──
+    const hero = document.querySelector('.hero');
+    const heroBg = document.querySelector('.hero-bg');
+    const heroGrid = document.querySelector('.hero-grid');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      if (heroBg) heroBg.style.transform = `translateY(${scrollY * 0.25}px)`;
+      if (heroGrid) heroGrid.style.transform = `translateY(${scrollY * 0.1}px)`;
+    }, { passive: true });
+
+    // ── SCROLL REVEAL ──
+    const reveals = document.querySelectorAll('.reveal');
+    function checkReveal() {
+      reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.95) el.classList.add('visible');
+      });
+    }
+    checkReveal();
+    window.addEventListener('scroll', checkReveal, { passive: true });
+    window.addEventListener('resize', checkReveal, { passive: true });
+
+    // ── NAV SCROLL ──
+    window.addEventListener('scroll', () => {
+      document.querySelector('nav').style.background =
+        window.scrollY > 80
+          ? 'rgba(28,31,38,0.97)'
+          : 'linear-gradient(to bottom, rgba(28,31,38,0.95) 0%, transparent 100%)';
+    });
+  </script>
+</body>
+</html>
